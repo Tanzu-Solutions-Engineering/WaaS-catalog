@@ -1,2 +1,2 @@
 # WaaS-catalog
-The catalog of published workshops
+A catalog of published workshops for the workshop as a service environment
