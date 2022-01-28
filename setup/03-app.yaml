@@ -1,0 +1,23 @@
+---
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: waas-catalog
+  namespace: packages
+spec:
+  serviceAccountName: contour-packages-sa
+  fetch:
+  - git:
+      url: https://github.com/Tanzu-Solutions-Engineering/WaaS-catalog
+      ref: origin/main
+      lfsSkipSmudge: true
+  template:
+  - ytt:
+      ignoreUnknownComments: true
+      paths:
+      - workshops/
+      valuesFrom:
+      - secretRef:
+          name: waas-catalog-values
+  deploy:
+  - kapp: {}

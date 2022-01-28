@@ -1,0 +1,31 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: waas-catalog-cluster-admin-role
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: waas-catalog-cluster-admin-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: waas-catalog-cluster-admin-role
+subjects:
+- kind: ServiceAccount
+  name: waas-catalog-sa
+  namespace: packages
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: waas-catalog-sa
+  namespace: packages
