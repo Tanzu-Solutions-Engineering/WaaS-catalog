@@ -48,6 +48,15 @@ spec:
         name: tap-registry
       type: kubernetes.io/dockerconfigjson
     - apiVersion: v1
+      data:
+        .dockerconfigjson: e30K
+      kind: Secret
+      metadata:
+        annotations:
+          secretgen.carvel.dev/image-pull-secret: ""
+        name: tanzu-registry
+      type: kubernetes.io/dockerconfigjson
+    - apiVersion: v1
       imagePullSecrets:
       - name: registry-credentials
       - name: tap-registry
@@ -158,6 +167,8 @@ spec:
           requests:
             cpu: 100m
             memory: 500Mi
+        imagePullSecrets:
+        - name: tanzu-registry
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
