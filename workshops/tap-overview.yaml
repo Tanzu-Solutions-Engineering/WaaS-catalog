@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+---
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
@@ -21,9 +23,9 @@ spec:
         layout: split
     env:
     - name: GITEA_PASSWORD
-      value: R4z7bGIqxMfFDzTx
+      value: #@ data.values.harbor.adminPassword
     - name: HARBOR_PASSWORD
-      value: R4z7bGIqxMfFDzTx
+      value: #@ data.values.harbor.adminPassword
     namespaces:
       budget: custom
     objects:
