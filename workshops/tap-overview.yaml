@@ -41,7 +41,6 @@ spec:
     - apiVersion: v1
       imagePullSecrets:
       - name: registry-credentials
-      - name: tap-registry
       kind: ServiceAccount
       metadata:
         name: tap-sa
