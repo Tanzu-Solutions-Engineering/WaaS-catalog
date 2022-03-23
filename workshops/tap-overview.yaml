@@ -23,7 +23,7 @@ spec:
         layout: split
     env:
     - name: GITEA_PASSWORD
-      value: #@ data.values.harbor.adminPassword
+      value: #@ data.values.gitea.adminPassword
     - name: HARBOR_PASSWORD
       value: #@ data.values.harbor.adminPassword
     namespaces:
