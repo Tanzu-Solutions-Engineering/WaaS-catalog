@@ -39,24 +39,6 @@ spec:
             storage: 10Gi
           type: PersistentVolumeClaim
     - apiVersion: v1
-      data:
-        .dockerconfigjson: e30K
-      kind: Secret
-      metadata:
-        annotations:
-          secretgen.carvel.dev/image-pull-secret: ""
-        name: tap-registry
-      type: kubernetes.io/dockerconfigjson
-    - apiVersion: v1
-      data:
-        .dockerconfigjson: e30K
-      kind: Secret
-      metadata:
-        annotations:
-          secretgen.carvel.dev/image-pull-secret: ""
-        name: tanzu-registry
-      type: kubernetes.io/dockerconfigjson
-    - apiVersion: v1
       imagePullSecrets:
       - name: registry-credentials
       - name: tap-registry
@@ -167,8 +149,6 @@ spec:
           requests:
             cpu: 100m
             memory: 500Mi
-        imagePullSecrets:
-        - name: tanzu-registry
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -191,7 +171,7 @@ spec:
             - env:
               - name: SERVICE_BINDING_ROOT
                 value: /bindings
-              image: harbor.tap.amer.end2end.link/tap/spring-sensors-sensor
+              image: harbor.workshop.amer.end2end.link/tap/spring-sensors-sensor
               imagePullPolicy: IfNotPresent
               name: sensors-publisher
               volumeMounts:
