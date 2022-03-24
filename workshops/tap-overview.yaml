@@ -6,7 +6,7 @@ metadata:
   name: tap-overview
 spec:
   content:
-    files: github.com/tanzu-end-to-end/tap-workshop?ref=main
+    files: github.com/tanzu-end-to-end/tap-workshop?ref=development
     image: harbor.tap.amer.end2end.link/tanzu-e2e/eduk8s-tap-workshop:latest
   description: An introduction to the Tanzu Application Platform
   difficulty: beginner
