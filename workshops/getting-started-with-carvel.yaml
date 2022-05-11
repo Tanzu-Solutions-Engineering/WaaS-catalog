@@ -1,4 +1,4 @@
-apiVersion: training.eduk8s.io/v1alpha2
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
   name: lab-getting-started-with-carvel
