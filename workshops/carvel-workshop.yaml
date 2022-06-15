@@ -1,5 +1,10 @@
 #@ load("@ytt:data", "data")
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: carvel-workshop-examples
+---
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
@@ -14,12 +19,6 @@ spec:
   content:
     image: harbor.workshop.amer.end2end.link/tap-workshop/tap-carvel-workshop:latest
     files: github.com/cdelashmutt-pivotal/tap-carvel-workshop?ref=main
-  environment:
-    objects:
-    - apiVersion: v1
-      kind: Namespace
-      metadata:
-        name: carvel-workshop-examples
   session:
     namespaces:
       budget: small
