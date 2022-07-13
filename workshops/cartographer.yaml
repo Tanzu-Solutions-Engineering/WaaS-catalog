@@ -1,0 +1,81 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: Workshop
+metadata:
+  name: cartographer-workshop
+spec:
+  title: Cartographer Workshop
+  description: An introduction Supply Chain Choreography with Cartographer
+  vendor: vmware.com
+  difficulty: beginner
+  duration: 60m
+  url: https://github.com/tanzu-end-to-end/cartographer-workshop
+  content:
+    image: "harbor.tap.corby.cc/tanzu-e2e/eduk8s-cartographer-workshop:latest"
+    files: "github.com/tanzu-end-to-end/cartographer-workshop?ref=main"
+  session:
+    namespaces:
+      budget: custom
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      editor:
+        enabled: true
+      registry:
+        enabled: true
+      docker:
+        enabled: true
+    dashboards:
+      - name: Cartographer
+        url: https://cartographer.sh
+    objects:
+      - apiVersion: v1
+        kind: LimitRange
+        metadata:
+          name: resource-limits
+        spec:
+          limits:
+            - type: PersistentVolumeClaim
+              max:
+                storage: 10Gi
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: $(session_namespace)-workshop-rw-crb
+          namespace: $(session_namespace)
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: workshop-cluster-role-rw
+        subjects:
+          - kind: ServiceAccount
+            namespace: $(workshop_namespace)
+            name: $(service_account)
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: $(session_namespace)-session-rw-crb
+          namespace: $(session_namespace)
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: workshop-cluster-role-rw
+        subjects:
+          - kind: ServiceAccount
+            namespace: $(session_namespace)
+            name: default
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: $(session_namespace)-workshop-ro-crb
+          namespace: $(session_namespace)
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: workshop-cluster-role-ro
+        subjects:
+          - kind: ServiceAccount
+            namespace: $(workshop_namespace)
+            name: $(service_account)
