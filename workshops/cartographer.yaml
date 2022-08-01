@@ -13,7 +13,7 @@ spec:
   url: https://github.com/tanzu-end-to-end/cartographer-workshop
   content:
     image: "harbor.tap.corby.cc/tanzu-e2e/eduk8s-cartographer-workshop:latest"
-    files: "github.com/tanzu-end-to-end/cartographer-workshop?ref=main"
+    files: "github.com/tanzu-end-to-end/cartographer-workshop?ref=parameterize-gitea"
   environment:
     objects:
     - apiVersion: rbac.authorization.k8s.io/v1
@@ -72,6 +72,11 @@ spec:
         verbs: [list, get]
 
   session:
+    env:
+    - name: GITEA_USER
+      value: gitea_admin
+    - name: GITEA_PASSWORD
+      value: #@ data.values.gitea.adminPassword
     namespaces:
       budget: custom
     applications:
