@@ -19,7 +19,7 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       metadata:
-        name: workshop-cluster-role-rw
+        name: $(environment_name)-carto-workshop-cluster-role-rw
       rules:
       - apiGroups: 
           - source.toolkit.fluxcd.io
@@ -48,7 +48,7 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       metadata:
-        name: workshop-cluster-role-ro
+        name: $(environment_name)-carto-workshop-cluster-role-ro
       rules:
       - apiGroups: 
           - kpack.io
@@ -110,7 +110,7 @@ spec:
         roleRef:
           apiGroup: rbac.authorization.k8s.io
           kind: ClusterRole
-          name: workshop-cluster-role-rw
+          name: $(environment_name)-carto-workshop-cluster-role-rw
         subjects:
           - kind: ServiceAccount
             namespace: $(workshop_namespace)
@@ -123,7 +123,7 @@ spec:
         roleRef:
           apiGroup: rbac.authorization.k8s.io
           kind: ClusterRole
-          name: workshop-cluster-role-rw
+          name: $(environment_name)-carto-workshop-cluster-role-rw
         subjects:
           - kind: ServiceAccount
             namespace: $(session_namespace)
@@ -136,7 +136,7 @@ spec:
         roleRef:
           apiGroup: rbac.authorization.k8s.io
           kind: ClusterRole
-          name: workshop-cluster-role-ro
+          name: $(environment_name)-carto-workshop-cluster-role-ro
         subjects:
           - kind: ServiceAccount
             namespace: $(workshop_namespace)
