@@ -14,7 +14,7 @@ spec:
     files: github.com/Tanzu-Solutions-Engineering/function-workshop?ref=main
   session:
     namespaces:
-      budget: small
+      budget: medium
     applications:
       terminal:
         enabled: true
