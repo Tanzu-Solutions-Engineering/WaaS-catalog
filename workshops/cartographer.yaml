@@ -30,6 +30,7 @@ spec:
           - ops.tips
           - tekton.dev
           - ""
+          - projectcontour.io
         resources:
           - gitrepositories
           - images
@@ -40,6 +41,7 @@ spec:
           - gitservers
           - configmaps
           - taskruns
+          - httpproxies
         verbs: [list, create, update, delete, patch, watch, get]
       - apiGroups:
           - carto.run
