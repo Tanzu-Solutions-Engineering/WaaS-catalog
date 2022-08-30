@@ -73,6 +73,8 @@ spec:
 
   session:
     env:
+    - name: GITEA_DOMAIN
+      value: gitea.$(ingress_domain)
     - name: GITEA_USER
       value: gitea_admin
     - name: GITEA_PASSWORD
