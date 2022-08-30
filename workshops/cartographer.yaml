@@ -10,10 +10,10 @@ spec:
   vendor: vmware.com
   difficulty: beginner
   duration: 60m
-  url: https://github.com/tanzu-end-to-end/cartographer-workshop?ref=individual-gitea
+  url: https://github.com/tanzu-end-to-end/cartographer-workshop
   content:
     image: "harbor.tap.corby.cc/tanzu-e2e/eduk8s-cartographer-workshop:latest"
-    files: "github.com/tanzu-end-to-end/cartographer-workshop?ref=parameterize-gitea"
+    files: "github.com/tanzu-end-to-end/cartographer-workshop?ref=individual-gitea"
   environment:
     objects:
     - apiVersion: rbac.authorization.k8s.io/v1
