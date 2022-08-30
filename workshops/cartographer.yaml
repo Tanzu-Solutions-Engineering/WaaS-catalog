@@ -181,7 +181,7 @@ spec:
         spec:
           # Prevent hangs when Learning Center deletes namespace
           noopDelete: true
-          serviceAccountName: learningcenter-services
+          serviceAccountName: $(service_account)
           fetch:
           - helmChart:
               name: gitea
