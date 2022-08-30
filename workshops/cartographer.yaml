@@ -74,11 +74,9 @@ spec:
   session:
     env:
     - name: GITEA_DOMAIN
-      value: gitea.$(ingress_domain)
-    - name: GITEA_USER
-      value: gitea_admin
-    - name: GITEA_PASSWORD
-      value: #@ data.values.gitea.adminPassword
+      value: gitea.$(session_namespace).svc
+    - name: GITEA_SECRET
+      value: gitea-admin
     namespaces:
       budget: custom
     applications:
