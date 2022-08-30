@@ -200,7 +200,7 @@ spec:
                 paths:
                   remove-test-pod.yaml: |
                     #@ load("@ytt:overlay", "overlay")
-                    #@overlay/match by=overlay.subset({"apiVersion": "v1","kind": "Pod","metadata":{"name":"$(session_namespace)-gitea-test-connection"}}), expects="1"
+                    #@overlay/match by=overlay.subset({"apiVersion": "v1","kind": "Pod","metadata":{"name":"$(session_namespace)-gitea-test-connection"}}), missing_ok=True
                     #@overlay/remove
           deploy:
           - kapp:
