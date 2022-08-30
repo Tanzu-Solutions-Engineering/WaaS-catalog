@@ -74,7 +74,7 @@ spec:
   session:
     env:
     - name: GITEA_DOMAIN
-      value: $(session_namespace)-gitea-http.$(session_namespace).svc:3000
+      value: $(session_namespace)-gitea.$(ingress_domain)
     - name: GITEA_ADMIN_SECRET
       value: gitea-admin
     namespaces:
@@ -202,6 +202,20 @@ spec:
                     #@ load("@ytt:overlay", "overlay")
                     #@overlay/match by=overlay.subset({"apiVersion": "v1","kind": "Pod","metadata":{"name":"$(session_namespace)-gitea-test-connection"}}), missing_ok=True
                     #@overlay/remove
+                  add-httpproxy.yaml: |
+                    apiVersion: projectcontour.io/v1
+                    kind: HTTPProxy
+                    metadata:
+                      name: gitea
+                    spec:
+                      virtualhost:
+                        fqdn: $(session_namespace)-gitea.$(ingress_domain)
+                        tls:
+                          secretName: waas-install/eduk8s-cert-tls
+                      routes:
+                      - services:
+                        - name: $(session_namespace)-gitea-http
+                          port: 3000
           deploy:
           - kapp:
               intoNs: $(session_namespace)
