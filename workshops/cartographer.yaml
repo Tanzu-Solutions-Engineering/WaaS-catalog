@@ -144,7 +144,8 @@ spec:
       - apiVersion: secretgen.k14s.io/v1alpha1
         kind: Password
         metadata:
-          name: gitea-admin
+          name: $(session_id)-gitea-admin
+          namespace: $(workshop_namespace)
         spec: 
           secretTemplate:
             type: Opaque
@@ -154,14 +155,15 @@ spec:
       - apiVersion: v1
         kind: ConfigMap
         metadata:
-          name: gitea-values
+          name: $(session_id)-gitea-values
+          namespace: $(workshop_namespace)
         data:
           values.yml: |
             global: 
               imageRegistry: harbor.workshop.amer.end2end.link/docker-proxy
             gitea:
               admin:
-                existingSecret: gitea-admin
+                existingSecret: $(session_id)-gitea-admin
               config:
                 database:
                   DB_TYPE: sqlite3
@@ -174,8 +176,10 @@ spec:
       - apiVersion: kappctrl.k14s.io/v1alpha1
         kind: App
         metadata:
-          name: gitea
+          name: $(session_id)-gitea
+          namespace: $(workshop_namespace)
         spec:
+          noopDelete: true
           serviceAccountName: $(service_account)
           fetch:
           - helmChart:
@@ -185,8 +189,9 @@ spec:
                 url: https://dl.gitea.io/charts/
           template:
           - helmTemplate:
+              namespace: $(session_namespace)
               valuesFrom:
               - configMapRef:
-                  name: gitea-values
+                  name: $(session_id)-gitea-values
           deploy:
           - kapp: {}
