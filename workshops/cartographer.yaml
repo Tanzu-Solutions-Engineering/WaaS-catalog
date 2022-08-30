@@ -144,8 +144,8 @@ spec:
       - apiVersion: secretgen.k14s.io/v1alpha1
         kind: Password
         metadata:
-          name: $(session_namespace)-gitea-admin
-          namespace: $(workshop_namespace)
+          name: gitea-admin
+          namespace: $(session_namespace)
         spec: 
           secretTemplate:
             type: Opaque
@@ -163,7 +163,7 @@ spec:
               imageRegistry: harbor.workshop.amer.end2end.link/docker-proxy
             gitea:
               admin:
-                existingSecret: $(session_namespace)-gitea-admin
+                existingSecret: gitea-admin
               config:
                 database:
                   DB_TYPE: sqlite3
@@ -195,4 +195,5 @@ spec:
               - configMapRef:
                   name: $(session_namespace)-gitea-values
           deploy:
-          - kapp: {}
+          - kapp:
+              intoNs: $(session_namespace)
