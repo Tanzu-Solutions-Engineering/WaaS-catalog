@@ -10,7 +10,7 @@ spec:
   vendor: vmware.com
   difficulty: beginner
   duration: 60m
-  url: https://github.com/tanzu-end-to-end/cartographer-workshop
+  url: https://github.com/tanzu-end-to-end/cartographer-workshop?ref=individual-gitea
   content:
     image: "harbor.tap.corby.cc/tanzu-e2e/eduk8s-cartographer-workshop:latest"
     files: "github.com/tanzu-end-to-end/cartographer-workshop?ref=parameterize-gitea"
@@ -141,3 +141,52 @@ spec:
           - kind: ServiceAccount
             namespace: $(workshop_namespace)
             name: $(service_account)
+      - apiVersion: secretgen.k14s.io/v1alpha1
+        kind: Password
+        metadata:
+          name: gitea-admin
+        spec: 
+          secretTemplate:
+            type: Opaque
+            stringData:
+              username: gitea-admin
+              password: $(value)
+      - apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: gitea-values
+        data:
+          values.yml: |
+            global: 
+              imageRegistry: harbor.workshop.amer.end2end.link/docker-proxy
+            gitea:
+              admin:
+                existingSecret: gitea-admin
+              config:
+                database:
+                  DB_TYPE: sqlite3
+            postgresql:
+              enabled: false
+            memcached:
+              enabled: false
+            persistence:
+              size: 1Gi
+      - apiVersion: kappctrl.k14s.io/v1alpha1
+        kind: App
+        metadata:
+          name: gitea
+        spec:
+          serviceAccountName: $(service_account)
+          fetch:
+          - helmChart:
+              name: gitea
+              version: 6.0.0
+              repository:
+                url: https://dl.gitea.io/charts/
+          template:
+          - helmTemplate:
+              valuesFrom:
+              - configMapRef:
+                  name: gitea-values
+          deploy:
+          - kapp: {}
