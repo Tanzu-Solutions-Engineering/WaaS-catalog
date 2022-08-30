@@ -190,8 +190,9 @@ spec:
                 url: https://dl.gitea.io/charts/
           template:
           - helmTemplate:
+              namespace: $(session_namespace)
               valuesFrom:
               - configMapRef:
-                  name: gitea-values
+                  name: $(session_namespace)-gitea-values
           deploy:
           - kapp: {}
