@@ -74,7 +74,7 @@ spec:
   session:
     env:
     - name: GITEA_DOMAIN
-      value: $(session_namespace)-gitea-http.$(session_namespace).svc
+      value: $(session_namespace)-gitea-http.$(session_namespace).svc:3000
     - name: GITEA_SECRET
       value: gitea-admin
     namespaces:
