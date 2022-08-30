@@ -144,7 +144,8 @@ spec:
       - apiVersion: secretgen.k14s.io/v1alpha1
         kind: Password
         metadata:
-          name: gitea-admin
+          name: $(session_namespace)-gitea-admin
+          namespace: $(workshop_namespace)
         spec: 
           secretTemplate:
             type: Opaque
@@ -154,14 +155,15 @@ spec:
       - apiVersion: v1
         kind: ConfigMap
         metadata:
-          name: gitea-values
+          name: $(session_namespace)-gitea-values
+          namespace: $(workshop_namespace)
         data:
           values.yml: |
             global: 
               imageRegistry: harbor.workshop.amer.end2end.link/docker-proxy
             gitea:
               admin:
-                existingSecret: gitea-admin
+                existingSecret: $(session_namespace)-gitea-admin
               config:
                 database:
                   DB_TYPE: sqlite3
@@ -174,11 +176,12 @@ spec:
       - apiVersion: kappctrl.k14s.io/v1alpha1
         kind: App
         metadata:
-          name: gitea
+          name: $(session_namespace)-gitea
+          namespace: $(workshop_namespace)
         spec:
           # Prevent hangs when Learning Center deletes namespace
           noopDelete: true
-          serviceAccountName: default
+          serviceAccountName: learningcenter-services
           fetch:
           - helmChart:
               name: gitea
