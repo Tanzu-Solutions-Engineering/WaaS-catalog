@@ -24,6 +24,10 @@ spec:
       editor:
         enabled: true
     objects:
+    - apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      metadata:
+        name: default-in-memory
     - apiVersion: v1
       kind: ServiceAccount
       metadata:
