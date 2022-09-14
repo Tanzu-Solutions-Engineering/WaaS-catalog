@@ -30,7 +30,7 @@ spec:
     - name: HARBOR_PASSWORD
       value: #@ data.values.harbor.adminPassword
     - name: VIEW_CLUSTER_DOMAIN
-      value: workshop.amer.end2end.link
+      value: contour.e2e.corby.cc
     namespaces:
       budget: custom
     objects:
