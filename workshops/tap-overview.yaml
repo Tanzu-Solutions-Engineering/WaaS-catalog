@@ -6,7 +6,7 @@ metadata:
   name: tap-overview
 spec:
   content:
-    files: github.com/tanzu-end-to-end/tap-workshop?ref=development
+    files: github.com/tanzu-end-to-end/tap-workshop?ref=main
     image: harbor.tap.corby.cc/tanzu-e2e/eduk8s-tap-workshop:latest
   description: An introduction to the Tanzu Application Platform
   difficulty: beginner
@@ -15,7 +15,8 @@ spec:
     applications:
       console:
         enabled: true
-        vendor: octant
+      registry:
+        enabled: true
       editor:
         enabled: true
       terminal:
@@ -42,151 +43,60 @@ spec:
         - max:
             storage: 10Gi
           type: PersistentVolumeClaim
-    - apiVersion: v1
-      imagePullSecrets:
-      - name: registry-credentials
-      kind: ServiceAccount
-      metadata:
-        name: tap-sa
-      secrets:
-      - name: registry-credentials
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: Role
+      kind: ClusterRoleBinding
       metadata:
-        annotations:
-          kapp.k14s.io/change-group: role
-        name: $(session_namespace)-kapp-permissions
-      rules:
-      - apiGroups:
-        - servicebinding.io
-        resources:
-        - servicebindings
-        verbs:
-        - '*'
-      - apiGroups:
-        - services.tanzu.vmware.com
-        resources:
-        - resourceclaims
-        verbs:
-        - '*'
-      - apiGroups:
-        - serving.knative.dev
-        resources:
-        - services
-        verbs:
-        - '*'
-      - apiGroups:
-        - ""
-        resources:
-        - configmaps
-        verbs:
-        - get
-        - watch
-        - list
-        - create
-        - update
-        - patch
-        - delete
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
-      metadata:
-        annotations:
-          kapp.k14s.io/change-rule: upsert after upserting role
-        name: $(session_namespace)-kapp-permissions
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: Role
-        name: $(session_namespace)-kapp-permissions
-      subjects:
-      - kind: ServiceAccount
-        name: tap-sa
-        namespace: $(session_namespace)
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
-      metadata:
-        name: $(session_namespace)-session-crb
+        name: $(session_namespace)-workshop-read-crb
         namespace: $(session_namespace)
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
-        name: cluster-admin
+        name: k8s-reader
       subjects:
       - kind: ServiceAccount
         name: $(service_account)
         namespace: $(workshop_namespace)
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
+      kind: ClusterRoleBinding
       metadata:
-        name: $(session_namespace)-default-crb
+        name: $(session_namespace)-workshop-rw-crb
         namespace: $(session_namespace)
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
-        name: cluster-admin
+        name: workshop-cluster-role
+      subjects:
+      - kind: ServiceAccount
+        name: $(service_account)
+        namespace: $(workshop_namespace)
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: $(session_namespace)-session-read-crb
+        namespace: $(session_namespace)
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: k8s-reader
       subjects:
       - kind: ServiceAccount
         name: default
         namespace: $(session_namespace)
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: Role
+      kind: ClusterRoleBinding
       metadata:
-        name: service-account-role
+        name: $(session_namespace)-session-rw-crb
         namespace: $(session_namespace)
-      rules:
-      - apiGroups:
-        - '*'
-        resources:
-        - '*'
-        verbs:
-        - '*'
-    - apiVersion: rabbitmq.com/v1beta1
-      kind: RabbitmqCluster
-      metadata:
-        name: rmq-1
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: workshop-cluster-role
+      subjects:
+      - kind: ServiceAccount
+        name: default
         namespace: $(session_namespace)
-      spec:
-        resources:
-          limits:
-            cpu: 100m
-            memory: 500Mi
-          requests:
-            cpu: 100m
-            memory: 500Mi
-    - apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        labels:
-          app: sensors-publisher
-        name: sensors-publisher
-        namespace: $(session_namespace)
-      spec:
-        replicas: 1
-        selector:
-          matchLabels:
-            app: sensors-publisher
-        template:
-          metadata:
-            labels:
-              app: sensors-publisher
-            name: sensors-publisher
-          spec:
-            containers:
-            - env:
-              - name: SERVICE_BINDING_ROOT
-                value: /bindings
-              image: harbor.workshop.amer.end2end.link/tap/spring-sensors-sensor
-              imagePullPolicy: IfNotPresent
-              name: sensors-publisher
-              volumeMounts:
-              - mountPath: /bindings/rmq
-                name: service-binding
-            restartPolicy: Always
-            volumes:
-            - name: service-binding
-              projected:
-                sources:
-                - secret:
-                    name: rmq-1-default-user
+    resources:
+      memory: 2Gi
   title: TAP Overview
   url: https://github.com/tanzu-end-to-end/tap-workshop
   vendor: eduk8s.io
