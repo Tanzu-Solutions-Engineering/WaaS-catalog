@@ -4,7 +4,7 @@ metadata:
   name: lab-spring-boot-k8s-gs
 spec:
   vendor: eduk8s.io
-  title: Getting Started with Spring Boot on Kubernetes
+  title: (NOT FUNCTIONAL) Getting Started with Spring Boot on Kubernetes
   description: Create your first Spring Boot application and deploy it to Kubernetes
   url: https://github.com/eduk8s-labs/lab-spring-boot-k8s-getting-started
   duration: 15m

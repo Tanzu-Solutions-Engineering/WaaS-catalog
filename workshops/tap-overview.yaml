@@ -97,6 +97,6 @@ spec:
         namespace: $(session_namespace)
     resources:
       memory: 2Gi
-  title: TAP Overview
+  title: (NOT FUNCTIONAL) TAP Overview
   url: https://github.com/tanzu-end-to-end/tap-workshop
   vendor: eduk8s.io
