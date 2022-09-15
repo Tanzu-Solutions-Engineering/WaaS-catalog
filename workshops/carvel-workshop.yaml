@@ -10,7 +10,7 @@ kind: Workshop
 metadata:
   name: tap-carvel-workshop
 spec:
-  title: (NOT FUNCTIONAL) Carvel for TAP
+  title: Carvel for TAP
   description: A workshop for self-paced learning of all the tools Carvel provides for the installation of TAP
   vendor: tanzu.vmware.com
   difficulty: beginner
