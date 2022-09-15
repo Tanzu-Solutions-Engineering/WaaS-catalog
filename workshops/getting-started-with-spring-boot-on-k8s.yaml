@@ -9,7 +9,7 @@ spec:
   url: https://github.com/eduk8s-labs/lab-spring-boot-k8s-getting-started
   duration: 15m
   content: 
-    image: jdk11-environment:*
+    image: quay.io/eduk8s/jdk11-environment:master
     files: github.com/eduk8s-labs/lab-spring-boot-k8s-getting-started
   session:
     namespaces:
