@@ -206,7 +206,7 @@ spec:
         name: $(workshop_namespace)-gitops-delivery
       spec:
         selector:
-          app.tanzu.vmware.com/deliverable-type: cdelashmutt-workshop-1664895663611-w01-deliverable
+          app.tanzu.vmware.com/deliverable-type: $(workshop_namespace)-deliverable
         resources:
           - name: source-provider
             templateRef:
