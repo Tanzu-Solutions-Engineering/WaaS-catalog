@@ -44,9 +44,10 @@ spec:
             storage: 10Gi
           type: PersistentVolumeClaim
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
+      kind: ClusterRoleBinding
       metadata:
-        name: workshop-read-crb
+        name: $(session_namespace)-workshop-read-crb
+        namespace: $(session_namespace)
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
@@ -56,9 +57,10 @@ spec:
         name: $(service_account)
         namespace: $(workshop_namespace)
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
+      kind: ClusterRoleBinding
       metadata:
-        name: workshop-rw-crb
+        name: $(session_namespace)-workshop-rw-crb
+        namespace: $(session_namespace)
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
@@ -68,9 +70,10 @@ spec:
         name: $(service_account)
         namespace: $(workshop_namespace)
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
+      kind: ClusterRoleBinding
       metadata:
-        name: session-read-crb
+        name: $(session_namespace)-session-read-crb
+        namespace: $(session_namespace)
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
@@ -80,9 +83,10 @@ spec:
         name: default
         namespace: $(session_namespace)
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
+      kind: ClusterRoleBinding
       metadata:
-        name: session-rw-crb
+        name: $(session_namespace)-session-rw-crb
+        namespace: $(session_namespace)
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole

@@ -14,16 +14,6 @@ spec:
   content:
     #!image: quay.io/eduk8s/lab-markdown-sample:master
     files: github.com/Tanzu-Solutions-Engineering/WaaS-MVP?ref=main
-  environment:
-    objects:
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: Role
-      metadata:
-        name: foo-e2e-user
-      rules:
-      - apiGroups: [ e2e.tanzu.vmware.com ]
-        resources: [ "*" ]
-        verbs: [ get, list, watch, create, delete, patch, update ]
   session:
     env:
     - name: HARBOR_PASSWORD
