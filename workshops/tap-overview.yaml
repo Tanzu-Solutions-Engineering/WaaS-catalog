@@ -46,8 +46,7 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
       metadata:
-        name: $(session_namespace)-workshop-read-crb
-        namespace: $(session_namespace)
+        name: workshop-read-crb
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
@@ -59,8 +58,7 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
       metadata:
-        name: $(session_namespace)-workshop-rw-crb
-        namespace: $(session_namespace)
+        name: workshop-rw-crb
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
@@ -72,8 +70,7 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
       metadata:
-        name: $(session_namespace)-session-read-crb
-        namespace: $(session_namespace)
+        name: session-read-crb
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
@@ -85,8 +82,7 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
       metadata:
-        name: $(session_namespace)-session-rw-crb
-        namespace: $(session_namespace)
+        name: session-rw-crb
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
