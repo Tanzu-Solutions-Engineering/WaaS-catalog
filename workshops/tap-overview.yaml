@@ -43,6 +43,11 @@ spec:
         - max:
             storage: 10Gi
           type: PersistentVolumeClaim
+        - default:
+            memory: 1Gi
+        - defaultRequest:
+            memory: 1Gi
+            cpu: 1000m
     # Permissions for workshop
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
