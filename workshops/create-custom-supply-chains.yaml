@@ -1,14 +1,10 @@
-#@ load("@ytt:data", "data")
-#@ load("@ytt:base64", "base64")
-#@ load("@ytt:json", "json")
----
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
   name: scc-workshop-dev
 spec:
   title: Supply Chain Choreographer - Development Version
-  description: A workshop that demonstrates the capabilities Supply Chain Choreographer provides and how to customize the supply chains.
+  description: A workshop that demonstrates the capabilities Supply Chain Choreographer provides.
   vendor: tanzu.vmware.com
   authors:
     - Timo Salm
@@ -25,8 +21,11 @@ spec:
   #! url: #@ data.values.workshop_git.git_url + "/" + data.values.workshop_git.git_org_name + "/" + data.values.workshop_git.git_repo
   url: https://github.com/dkhopade/tap-cartographer-workshop
   content:
-    image: #@ "{}/tap-workshop/cartographer-workshop:latest".format(data.values.container_registry.hostname)
-    files: #@ "{}/{}/tap-cartographer-workshop/workshop?ref=se-supplychains-workshop-dev".format(data.values.workshop_git.git_url,data.values.workshop_git.git_org_name)
+    #! image: #@ "{}/tap-workshop/cartographer-workshop:latest".format(data.values.container_registry.hostname)
+    #! files: #@ "{}/{}/tap-cartographer-workshop/workshop?ref=se-supplychains-workshop-dev".format(data.values.workshop_git.git_url,data.values.workshop_git.git_org_name)
+    #! image: dktapdemo.azurecr.io/tap-workshop/cartographer-workshop:latest
+    image: ghcr.io/dkhopade/tap-workshop/cartographer-workshop:latest
+    files: github.com/dkhopade/tap-cartographer-workshop/workshop?ref=main
   session:
     resources:
       memory: 3Gi
@@ -45,28 +44,28 @@ spec:
       - name: Cartographer Docs
         url: https://cartographer.sh/docs/development/
       - name: TAP GUI
-        url: #@ "http://tap-gui.{}/supply-chain/".format(data.values.tap.ingress_domain)
+        url: https://tap-gui.kubecorn.com
       - name: Carto Live Editor
         url: https://cartographer.sh/live-editor/index.htm
     env: 
     - name: TAP_INGRESS
-      value: #@ data.values.tap.ingress_domain
+      value: kubecorn.com
     - name: TAP_CNRS_SUBDOMAIN
-      value: #@ data.values.tap.cnrs_subdomain
+      value: kubecorn.com
     - name: CONTAINER_REGISTRY_HOSTNAME
-      value: #@ data.values.container_registry.hostname
+      value: dktapdemo.azurecr.io
     - name: CONTAINER_REGISTRY_USERNAME
-      value: #@ data.values.container_registry.username
+      value: dktapdemo
     - name: CONTAINER_REGISTRY_PASSWORD
-      value: #@ data.values.container_registry.password
+      value: QMOAadagDR9/u/kLXt/pLWxFbSrOJRbZlnXE+YxU4U+ACRB9CKBD
     - name: CONTAINER_REGISTRY_REPOSITORY
-      value: #@ data.values.container_registry.repository
+      value: scc-workshop-repos
     - name: GITOPS_REPOSITORY
-      value: #@ "{}/$(session_namespace).git".format(data.values.gitops.https_repository_prefix)
+      value: https://github.com/dkhopade/scc-workshops
     - name: GITOPS_REPOSITORY_USERNAME
-      value: #@ data.values.gitops.basic_auth_username
+      value: dkhopade
     - name: GITOPS_REPOSITORY_PASSWORD
-      value: #@ data.values.gitops.basic_auth_password
+      value: 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
     objects:
       - apiVersion: v1
         kind: LimitRange
@@ -84,9 +83,7 @@ spec:
           name: tanzu-net-credentials
         type: kubernetes.io/dockerconfigjson
         data:
-          #@ docker_auth = base64.encode("{}:{}".format(data.values.tanzunet.username, data.values.tanzunet.password))
-          #@ docker_creds = {"username": data.values.tanzunet.username, "password": data.values.tanzunet.password, "auth": docker_auth}
-          .dockerconfigjson: #@ base64.encode(json.encode({"auths": {"registry.tanzu.vmware.com": docker_creds}}))
+          .dockerconfigjson: eyJhdXRocyI6IHsicmVnaXN0cnkudGFuenUudm13YXJlLmNvbSI6IHsidXNlcm5hbWUiOiJka2hvcGFkZUB2bXdhcmUuY29tIiwicGFzc3dvcmQiOiJZb2dpcmFqQDIwMjIiLCJhdXRoIjoiIn19fQo=
       - apiVersion: rbac.authorization.k8s.io/v1
         kind: Role
         metadata:
