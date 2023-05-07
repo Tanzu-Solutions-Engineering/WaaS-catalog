@@ -29,6 +29,8 @@ spec:
       value: #@ data.values.harbor.user
     - name: HARBOR_PASSWORD
       value: #@ data.values.harbor.adminPassword
+    - name: REGISTRY_URL
+      value: gcr.io
     - name: VIEW_CLUSTER_DOMAIN
       value: contour.e2e.corby.cc
     namespaces:
