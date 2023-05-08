@@ -17,7 +17,7 @@ spec:
   duration: 90m
   url: https://github.com/tsalm-pivotal/tap-carvel-workshop
   content:
-    image: harbor.workshop.amer.end2end.link/tap-workshop/tap-carvel-workshop:latest
+    image: gcr.io/pa-cdelashmutt/tap-workshop/tap-carvel-workshop:latest
     files: github.com/cdelashmutt-pivotal/tap-carvel-workshop?ref=main
   session:
     namespaces:

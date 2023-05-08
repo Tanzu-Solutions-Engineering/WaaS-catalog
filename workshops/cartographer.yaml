@@ -12,7 +12,7 @@ spec:
   duration: 60m
   url: https://github.com/tanzu-end-to-end/cartographer-workshop
   content:
-    image: "harbor.tap.corby.cc/tanzu-e2e/eduk8s-cartographer-workshop:latest"
+    image: "gcr.io/pa-cdelashmutt/tanzu-e2e/eduk8s-cartographer-workshop:latest"
     files: "github.com/tanzu-end-to-end/cartographer-workshop?ref=individual-gitea"
   environment:
     objects:
@@ -376,7 +376,7 @@ spec:
         data:
           values.yml: |
             global: 
-              imageRegistry: harbor.workshop.amer.end2end.link/docker-proxy
+              imageRegistry: gcr.io/pa-cdelashmutt/docker_hub
             gitea:
               admin:
                 existingSecret: gitea-admin

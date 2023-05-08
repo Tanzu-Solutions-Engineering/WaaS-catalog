@@ -16,8 +16,8 @@ spec:
     files: github.com/Tanzu-Solutions-Engineering/WaaS-MVP?ref=main
   session:
     env:
-    - name: HARBOR_PASSWORD
-      value: #@ data.values.harbor.adminPassword
+    - name: GITEA_PASSWORD
+      value: #@ data.values.gitea.adminPassword
     namespaces:
       budget: small
     applications:
@@ -55,12 +55,5 @@ spec:
       - kind: ServiceAccount
         namespace: $(workshop_namespace)
         name: $(service_account)
-    - apiVersion: e2e.tanzu.vmware.com/v1beta1
-      kind: HarborProject
-      metadata:
-        name: $(session_namespace)
-        annotations:
-          training.eduk8s.io/objects.crd.scope: Namespaced
-      spec:
-        name: $(session_namespace)
+
 

@@ -206,7 +206,7 @@ spec:
             initContainers:
             containers:
               - name: zookeeper
-                image: harbor.workshop.amer.end2end.link/docker-proxy/bitnami/zookeeper:3.8.0-debian-11-r24
+                image: gcr.io/pa-cdelashmutt/docker_hub/bitnami/zookeeper:3.8.0-debian-11-r24
                 imagePullPolicy: "IfNotPresent"
                 securityContext:
                   runAsNonRoot: true
@@ -356,7 +356,7 @@ spec:
             serviceAccountName: kafka
             containers:
               - name: kafka
-                image: harbor.workshop.amer.end2end.link/docker-proxy/bitnami/kafka:3.2.1-debian-11-r2
+                image: gcr.io/pa-cdelashmutt/docker_hub/bitnami/kafka:3.2.1-debian-11-r2
                 imagePullPolicy: "IfNotPresent"
                 securityContext:
                   runAsNonRoot: true

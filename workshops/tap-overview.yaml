@@ -7,7 +7,7 @@ metadata:
 spec:
   content:
     files: github.com/tanzu-end-to-end/tap-workshop?ref=main
-    image: harbor.tap.corby.cc/tanzu-e2e/eduk8s-tap-workshop:latest
+    image: gcr.io/pa-cdelashmutt/tanzu-e2e/eduk8s-tap-workshop:latest
   description: An introduction to the Tanzu Application Platform
   difficulty: beginner
   duration: 30m
@@ -25,12 +25,6 @@ spec:
     env:
     - name: GITEA_PASSWORD
       value: #@ data.values.gitea.adminPassword
-    # - name: HARBOR_USER
-    #   value: #@ data.values.harbor.user
-    # - name: HARBOR_PASSWORD
-    #   value: #@ data.values.harbor.adminPassword
-    # - name: REGISTRY_URL
-    #   value: gcr.io
     - name: VIEW_CLUSTER_DOMAIN
       value: contour.e2e.corby.cc
     namespaces:

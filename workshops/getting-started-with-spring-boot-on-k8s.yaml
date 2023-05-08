@@ -9,7 +9,7 @@ spec:
   url: https://github.com/tanzu-end-to-end/lab-spring-boot-k8s-getting-started
   duration: 15m
   content: 
-    image: harbor.workshop.amer.end2end.link/tap/learning-center-jdk17-environment:latest
+    image: gcr.io/pa-cdelashmutt/tanzu-e2e/learning-center-jdk17-environment:latest
     files: github.com/tanzu-end-to-end/lab-spring-boot-k8s-getting-started
   session:
     namespaces:
