@@ -37,11 +37,9 @@ spec:
         enabled: true
     env: 
     - name: TAP_PRODUCT_DOCS_BASE_URL
-      value: https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap
+      value: https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap
     - name: KAPP_CONTROLLER_NAMESPACE
-      value: tkg-system
-    - name: TAP_PACKAGE_NAME
-      value: tap-full
+      value: tanzu-system
     objects:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
