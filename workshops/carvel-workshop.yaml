@@ -75,7 +75,7 @@ spec:
       kind: Role
       metadata:
         name: $(session_namespace)-default
-        namespace: tkg-system
+        namespace: tanzu-system
       rules:
         - apiGroups: [""]
           resources: ["pods"]
@@ -107,7 +107,7 @@ spec:
       kind: RoleBinding
       metadata:
         name: $(session_namespace)-default
-        namespace: tkg-system
+        namespace: tanzu-system
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: Role
