@@ -433,7 +433,7 @@ spec:
                       virtualhost:
                         fqdn: $(session_namespace)-gitea.$(ingress_domain)
                         tls:
-                          secretName: waas-install/eduk8s-cert-tls
+                          secretName: default/default-cert
                       routes:
                       - services:
                         - name: $(session_namespace)-gitea-http
