@@ -24,7 +24,7 @@ spec:
     #! image: #@ "{}/tap-workshop/cartographer-workshop:latest".format(data.values.container_registry.hostname)
     #! files: #@ "{}/{}/tap-cartographer-workshop/workshop?ref=se-supplychains-workshop-dev".format(data.values.workshop_git.git_url,data.values.workshop_git.git_org_name)
     #! image: dktapdemo.azurecr.io/tap-workshop/cartographer-workshop:latest
-    image: ghcr.io/dkhopade/tap-workshop/cartographer-workshop:latest
+    image: dktapdemo.azurecr.io/tap-workshop/cartographer-workshop:latest #! ghcr.io/dkhopade/tap-workshop/cartographer-workshop:latest
     files: github.com/dkhopade/tap-cartographer-workshop/workshop?ref=main
   session:
     resources:
