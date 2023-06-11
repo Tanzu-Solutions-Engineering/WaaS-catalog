@@ -1,3 +1,6 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
+#@ load("@ytt:json", "json")
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
@@ -61,11 +64,11 @@ spec:
     - name: CONTAINER_REGISTRY_REPOSITORY
       value: scc-workshop-repos
     - name: GITOPS_REPOSITORY
-      value: https://github.com/dkhopade/scc-workshops
+      value: http://gitea.kubecorn.com/dkhopade/scc-workshops
     - name: GITOPS_REPOSITORY_USERNAME
-      value: dkhopade
+      value: gitea_admin
     - name: GITOPS_REPOSITORY_PASSWORD
-      value: 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
+      value: VMWare1!
     objects:
       - apiVersion: v1
         kind: LimitRange
@@ -189,6 +192,19 @@ spec:
             name: default
             namespace: $(session_namespace)
       #! Permissions for workshop session
+      - apiVersion: v1
+        imagePullSecrets:
+        - name: registry-credentials
+        - name: tanzu-net-credentials
+        - name: tap-registry
+        kind: ServiceAccount
+        metadata:
+          name: scc-workshop-sa
+          namespace: $(session_namespace)
+        secrets:
+        - name: registry-credentials
+        - name: tap-registry
+
       - apiVersion: rbac.authorization.k8s.io/v1
         kind: RoleBinding
         metadata:
@@ -215,7 +231,7 @@ spec:
         subjects:
           - kind: ServiceAccount
             namespace: $(session_namespace)
-            name: default
+            name: scc-workshop-sa
 
       #! Install grype
       - apiVersion: packaging.carvel.dev/v1alpha1
