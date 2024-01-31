@@ -27,7 +27,6 @@ spec:
       value: #@ data.values.gitea.adminPassword
     - name: VIEW_CLUSTER_DOMAIN
       value: e2e-build.amer.end2end.link
-    env:
     - name: KUBECTL_VERSION
       value: "1.27"
     namespaces:
