@@ -1,0 +1,24 @@
+apiVersion: training.educates.dev/v1beta1
+kind: Workshop
+metadata:
+  name: lab-spring-gateway
+spec:
+  title: Building a Gateway with Spring
+  description: Getting started with Spring Cloud Gateway
+  workshop:
+    image: ghcr.io/vmware-tanzu-labs/educates-jdk17-environment:sha-6ce8b1f
+    files:
+    - image:
+        url: ghcr.io/vmware-tanzu-labs/lab-spring-gateway-files:1.0-beta.1
+      includePaths:
+      - /exercises/**
+      - /workshop/**
+  session:
+    namespaces:
+      budget: small
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      editor:
+        enabled: true

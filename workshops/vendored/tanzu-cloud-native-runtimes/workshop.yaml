@@ -1,0 +1,125 @@
+apiVersion: training.educates.dev/v1beta1
+kind: Workshop
+metadata:
+  name: lab-tanzu-cloudnative-runtimes
+spec:
+  title: Serverless Development using Knative
+  description: A workshop to showcase serverless capabilities in Tanzu
+  url: https://github.com/vmware-tanzu-labs/lab-tanzu-cloudnative-runtimes
+  workshop:
+    files:
+    - image:
+        url: ghcr.io/vmware-tanzu-labs/lab-tanzu-cloudnative-runtimes-files:2.1-beta.1
+      includePaths:
+      - /workshop/**
+      - /exercises/**
+    packages:
+    - name: tce
+      files:
+      - image:
+          url: ghcr.io/vmware-tanzu-labs/educates-extension-packages/tce-0.12:sha-5f9081f
+  session:
+    namespaces:
+      budget: custom
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      console:
+        enabled: true
+      editor:
+        enabled: true
+      vcluster:
+        enabled: true
+        version: "1.23" # pinning for various packages flaking on Legacy SA Token Secrets + policy/v1beta1 API deprecation for knative-serving-1.0.0
+        ingress:
+          enabled: true
+          subdomains:
+          - default
+    objects:
+      - apiVersion: data.packaging.carvel.dev/v1alpha1
+        kind: Package
+        metadata:
+          name: kapp-controller.community.tanzu.vmware.com.0.35.0
+          namespace: $(session_namespace)-vc
+        spec:
+          refName: kapp-controller.community.tanzu.vmware.com
+          version: 0.35.0
+          releaseNotes: "kapp-controller 0.35.0 https://github.com/vmware-tanzu/carvel-kapp-controller"
+          licenses:
+            - "Apache 2.0"
+          template:
+            spec:
+              fetch:
+                - imgpkgBundle:
+                    image: projects.registry.vmware.com/tce/kapp-controller@sha256:6649d06214b2527d47c9b1d146799841656988c682ae7ec46ec4d0edb37c56fa
+              template:
+                - ytt:
+                    paths:
+                      - config/
+                - kbld:
+                    paths:
+                      - "-"
+                      - .imgpkg/images.yml
+              deploy:
+                - kapp: {}
+      - apiVersion: packaging.carvel.dev/v1alpha1
+        kind: PackageInstall
+        metadata:
+          name: kapp-controller
+          namespace: $(session_namespace)-vc
+        spec:
+          packageRef:
+            refName: kapp-controller.community.tanzu.vmware.com
+            versionSelection:
+              constraints: 0.35.0
+          cluster:
+            namespace: default
+            kubeconfigSecretRef:
+              name: $(vcluster_secret)
+              key: config
+          noopDelete: true
+          syncPeriod: 24h
+      - apiVersion: data.packaging.carvel.dev/v1alpha1
+        kind: Package
+        metadata:
+          name: secretgen-controller.community.tanzu.vmware.com.0.8.0
+          namespace: $(session_namespace)-vc
+        spec:
+          refName: secretgen-controller.community.tanzu.vmware.com
+          version: 0.8.0
+          releaseNotes: secretgen-controller 0.8.0 https://github.com/vmware-tanzu/carvel-secretgen-controller
+          licenses:
+            - Apache 2.0
+          template:
+            spec:
+              fetch:
+                - imgpkgBundle:
+                    image: projects.registry.vmware.com/tce/secretgen-controller@sha256:e9631ae47719e5f3344589c40188206233e87efc8a58ab965a43dba3bc7787c0
+              template:
+                - ytt:
+                    paths:
+                      - config/
+                - kbld:
+                    paths:
+                      - '-'
+                      - .imgpkg/images.yml
+              deploy:
+                - kapp: { }
+      - apiVersion: packaging.carvel.dev/v1alpha1
+        kind: PackageInstall
+        metadata:
+          name: secretgen-controller
+          namespace: $(session_namespace)-vc
+        spec:
+          packageRef:
+            refName: secretgen-controller.community.tanzu.vmware.com
+            versionSelection:
+              constraints: 0.8.0
+          cluster:
+            namespace: default
+            kubeconfigSecretRef:
+              name: $(vcluster_secret)
+              key: config
+          noopDelete: true
+          syncPeriod: 24h
