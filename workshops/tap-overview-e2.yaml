@@ -31,6 +31,32 @@ spec:
       budget: custom
     objects:
     - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: $(session_namespace)-export
+        namespace: $(workshop_namespace)
+        annotations:
+          secretgen.carvel.dev/image-pull-secret: ""
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: e30K
+    - apiVersion: secretgen.carvel.dev/v1alpha1
+      kind: SecretExport
+      metadata:
+        name: $(session_namespace)-export
+        namespace: $(workshop_namespace)
+      spec:
+        toNamespace: $(session_namespace)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: exported-creds
+        annotations:
+          secretgen.carvel.dev/image-pull-secret: ""
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: e30K
+    - apiVersion: v1
       kind: LimitRange
       metadata:
         name: resource-limits
