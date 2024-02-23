@@ -29,6 +29,8 @@ spec:
       value: e2e-build.amer.end2end.link
     namespaces:
       budget: custom
+      security:
+        policy: baseline
     objects:
     - apiVersion: secrets.educates.dev/v1beta1
       kind: SecretImporter
