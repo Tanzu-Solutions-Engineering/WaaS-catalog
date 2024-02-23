@@ -125,7 +125,7 @@ spec:
     - apiVersion: secrets.educates.dev/v1beta1
       kind: SecretInjector
       metadata:
-        name: $(workshop_name)-registry-credentials
+        name: $(workshop_namespace)-registry-credentials
       spec:
         rules:
         - sourceSecrets:
@@ -136,7 +136,7 @@ spec:
           targetNamespaces:
             nameSelector:
               matchNames:
-              - $(workshop_name)-*
+              - $(workshop_namespace)-*
   title: TAP Overview
   url: https://github.com/tanzu-end-to-end/tap-workshop
   vendor: eduk8s.io
