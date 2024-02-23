@@ -27,6 +27,8 @@ spec:
       value: #@ data.values.gitea.adminPassword
     - name: VIEW_CLUSTER_DOMAIN
       value: e2e-build.amer.end2end.link
+    - name: EDITOR_HOME
+      value: /home/eduk8s/spring-sensors
     namespaces:
       budget: custom
       security:
