@@ -38,6 +38,14 @@ spec:
       spec:
         copyAuthorization:
           sharedSecret: #@ data.values.educates_secret_export.key
+    - apiVersion: secrets.educates.dev/v1beta1
+      kind: SecretImporter
+      metadata:
+        name: exported-reg-creds
+        namespace: $(session_namespace)
+      spec:
+        copyAuthorization:
+          sharedSecret: #@ data.values.educates_secret_export.key
     - apiVersion: v1
       kind: LimitRange
       metadata:
@@ -112,6 +120,23 @@ spec:
           name: default
     resources:
       memory: 2Gi
+  environment:
+    objects:
+    - apiVersion: secrets.educates.dev/v1beta1
+      kind: SecretInjector
+      metadata:
+        name: $(workshop_name)-registry-credentials
+      spec:
+        rules:
+        - sourceSecrets:
+            nameSelector:
+              matchNames:
+              - exported-creds
+              - exported-reg-creds
+          targetNamespaces:
+            nameSelector:
+              matchNames:
+              - $(workshop_name)-*
   title: TAP Overview
   url: https://github.com/tanzu-end-to-end/tap-workshop
   vendor: eduk8s.io
