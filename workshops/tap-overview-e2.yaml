@@ -6,8 +6,8 @@ metadata:
   name: tap-overview
 spec:
   content:
-    files: github.com/tanzu-end-to-end/tap-workshop?ref=educates2
-    image: gcr.io/pa-cdelashmutt/tanzu-e2e/eduk8s-tap-workshop:educates-2.6
+    files: github.com/tanzu-end-to-end/tap-workshop?ref=main
+    image: gcr.io/pa-cdelashmutt/tanzu-e2e/eduk8s-tap-workshop:latest
   description: An introduction to the Tanzu Application Platform
   difficulty: beginner
   duration: 30m
