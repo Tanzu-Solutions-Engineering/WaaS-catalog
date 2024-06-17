@@ -1,0 +1,64 @@
+apiVersion: training.educates.dev/v1beta1
+kind: Workshop
+metadata:
+  name: "lab-tanzu-platform-developer-experience"
+spec:
+  title: "Tanzu Platform for Kubernetes Developer Experience"
+  description: "The workshop covers the developer experience of deploying applications to the Tanzu Platform."
+  workshop:
+    files:
+    - git:
+        url: https://github.com/Tanzu-Solutions-Engineering/tanzu-platform-workshop
+        ref: origin/dev-experience
+      includePaths:
+      - /workshop/**
+      - /exercises/**
+      - /README.md
+      newRootPath: lab-tanzu-platform-developer-experience
+    packages:
+    - name: tanzu-cli
+      files:
+      - image:
+          url: ghcr.io/timosalm/tanzu-platform-workshop/lab-tanzu-platform-developer-experience-tanzu-cli-extension-package:v1.3.0
+  session:
+    namespaces:
+      budget: large
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      editor:
+        enabled: true
+      console:
+        enabled: false
+      docker:
+        enabled: true
+      registry:
+        enabled: true
+      vcluster:
+        enabled: false
+    env:
+    - name: TANZU_CLI_CLOUD_SERVICES_ORGANIZATION_ID
+      value: 77aee83b-308f-4c8e-b9c4-3f7a6f19ba75
+    - name: KUBECONFIG
+      value: /home/eduk8s/.config/tanzu/kube/config
+    - name: PUBLIC_REGISTRY_HOST
+      value: public-registry-$(session_name).$(ingress_domain)
+    - name: TANZU_CLI_SPACE_CREATE_TOKEN
+      value: #@ data.values.tanzu_platform.space_create_token
+    - name: TANZU_PLATFORM_PROJECT
+      value: AMER-East
+    - name: TANZU_PLATFORM_PROFILES
+      value: spring-dev.tanzu.vmware.com,custom-networking.aws-work.grogcsave.net
+    - name: TANZU_PLATFORM_AVAILABILITY_TARGETS
+      value: cdelashmutt-dev
+    ingresses:
+    - name: public-registry
+      host: $(session_name)-registry
+      port: 5000
+      protocol: http
+      headers:
+      - name: Authorization
+        value: "Basic REGISTRY_BASIC_AUTH_CREDENTIALS"
+      authentication:
+        type: none
