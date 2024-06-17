@@ -42,27 +42,9 @@ spec:
         secretTemplate:
           type: Opaque
           stringData:
-            postgresql-password: $(value)
+            postgres-password: $(value)
             password: $(value)
             replication-password: $(value)
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-        name: postgres-install-values
-      type: Opaque
-      stringData:
-        data.yaml: |
-          global:
-            postgresql:
-              auth:
-                existingSecret: postgres-existing-secret
-          primary:
-            persistentVolumeClaimRetentionPolicy:
-              whenDeleted: Delete
-            service:
-              type: LoadBalancer
-              annotations:
-                external-dns.alpha.kubernetes.io/hostname: postgres-$(workshop_name).workshop.amer.end2end.link 
     - apiVersion: kappctrl.k14s.io/v1alpha1
       kind: App
       metadata:
@@ -72,26 +54,10 @@ spec:
         syncPeriod: 720h
         noopDelete: true
         fetch:
-        - helmChart:
-            name: postgres
-            version: 16.3.0
-            repository:
-              url: oci://registry-1.docker.io/bitnamicharts/postgresql
+        - git:
+            url: https://github.com/cdelashmutt-pivotal/workshop-postgres-package
+            ref: origin/main
         template:
-        - helmTemplate:
-            valuesFrom:
-            - secretRef:
-                name: postgres-install-values
-            - downwardAPI:
-                items:
-                - name: namespace
-                  fieldPath: metadata.namespace
-                - name: kubeVersion
-                  kubernetesVersion: {}
-                - name: apiGroupVersions
-                  kubernetesAPIs: {}
-                - name: kappCtrlVersion
-                  kappControllerVersion: {}
         - ytt:
             inline:
               paths:
