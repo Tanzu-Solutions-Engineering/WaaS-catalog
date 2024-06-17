@@ -14,16 +14,24 @@ spec:
       metadata:
         name: kapp-installer
     - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
+      kind: Role
+      metadata:
+        name: kapp-installer-role
+      rules:
+      - apiGroups: ['*']
+        resources: ['*']
+        verbs: ['*']
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
       metadata:
         name: kapp-installer-role-rolebinding
       roleRef:
         apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: cluster-admin
+        kind: Role
+        name: kapp-installer-role
       subjects:
       - kind: ServiceAccount
-        name: kapp-installer
+        name: kapp-installer-role
         namespace: $(workshop_namespace)
     - apiVersion: secretgen.k14s.io/v1alpha1
       kind: Password
@@ -51,7 +59,6 @@ spec:
             ref: origin/main
         template:
         - ytt: {}
-
         deploy:
         - kapp: {}
 
