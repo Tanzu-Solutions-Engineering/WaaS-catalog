@@ -7,6 +7,111 @@ metadata:
 spec:
   title: "Tanzu Platform for Kubernetes Developer Experience"
   description: "The workshop covers the developer experience of deploying applications to the Tanzu Platform."
+  environment:
+    objects:
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: kapp-installer
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      metadata:
+        name: kapp-installer-role
+      rules:
+      - apiGroups: ['*']
+        resources: ['*']
+        verbs: ['*']
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      metadata:
+        name: kapp-installer-role-rolebinding
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: Role
+        name: kapp-installer-role
+      subjects:
+      - kind: ServiceAccount
+        name: kapp-installer-role
+        namespace: $(workshop_namespace)
+    - apiVersion: secretgen.k14s.io/v1alpha1
+      kind: Password
+      metadata:
+        name: postgres-existing-secret
+      spec:
+        length: 12
+        secretTemplate:
+          type: Opaque
+          stringData:
+            postgresql-password: $(value)
+            password: $(value)
+            replication-password: $(value)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: postgres-install-values
+      type: Opaque
+      stringData:
+        data.yaml: |
+          global:
+            postgresql:
+              auth:
+                existingSecret: postgres-existing-secret
+          primary:
+            persistentVolumeClaimRetentionPolicy:
+              whenDeleted: Delete
+            service:
+              type: LoadBalancer
+              annotations:
+                external-dns.alpha.kubernetes.io/hostname: postgres-$(workshop_name).workshop.amer.end2end.link 
+    - apiVersion: kappctrl.k14s.io/v1alpha1
+      kind: App
+      metadata:
+        name: postgres
+      spec:
+        serviceAccountName: kapp-installer
+        syncPeriod: 720h
+        noopDelete: true
+        fetch:
+        - helmChart:
+            name: postgres
+            repository:
+              url: oci://registry-1.docker.io/bitnamicharts/postgresql
+        template:
+        - helmTemplate:
+            valuesFrom:
+            - secretRef:
+                name: postgres-install-values
+            - downwardAPI:
+                items:
+                - name: namespace
+                  fieldPath: metadata.namespace
+                - name: kubeVersion
+                  kubernetesVersion: {}
+                - name: apiGroupVersions
+                  kubernetesAPIs: {}
+                - name: kappCtrlVersion
+                  kappControllerVersion: {}
+        - ytt:
+            inline:
+              paths:
+                overlays.yaml: |
+                  #@ load("@ytt:data", "data")
+                  #@ load("@ytt:overlay", "overlay")
+                  #@overlay/match by=overlay.all, expects="1+"
+                  ---
+                  metadata:
+                    #@overlay/match missing_ok=True
+                    ownerReferences:
+                      - apiVersion: training.educates.dev/v1beta1
+                        kind: WorkshopSession
+                        blockOwnerDeletion: true
+                        controller: true
+                        name: $(session_name)
+                        uid: $(workshop_session_uid)
+
+        deploy:
+        - kapp: {}
+
   workshop:
     files:
     - git:
