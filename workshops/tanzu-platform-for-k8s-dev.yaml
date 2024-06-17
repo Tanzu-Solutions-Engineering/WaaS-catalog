@@ -16,7 +16,7 @@ spec:
       - /workshop/**
       - /exercises/**
       - /README.md
-      newRootPath: lab-tanzu-platform-developer-experience
+      path: lab-tanzu-platform-developer-experience
     packages:
     - name: tanzu-cli
       files:
