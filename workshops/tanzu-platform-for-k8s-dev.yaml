@@ -42,7 +42,7 @@ spec:
       metadata:
         name: postgres
       spec:
-        serviceAccountName: $(service_account)
+        serviceAccountName: kapp-installer
         syncPeriod: 720h
         noopDelete: true
         fetch:
@@ -50,23 +50,7 @@ spec:
             url: https://github.com/cdelashmutt-pivotal/workshop-postgres-package
             ref: origin/main
         template:
-        - ytt:
-            inline:
-              paths:
-                overlays.yaml: |
-                  #@ load("@ytt:data", "data")
-                  #@ load("@ytt:overlay", "overlay")
-                  #@overlay/match by=overlay.all, expects="1+"
-                  ---
-                  metadata:
-                    #@overlay/match missing_ok=True
-                    ownerReferences:
-                      - apiVersion: training.educates.dev/v1beta1
-                        kind: WorkshopSession
-                        blockOwnerDeletion: true
-                        controller: true
-                        name: $(session_name)
-                        uid: $(workshop_session_uid)
+        - ytt: {}
 
         deploy:
         - kapp: {}
