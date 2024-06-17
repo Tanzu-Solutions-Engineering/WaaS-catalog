@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+---
 apiVersion: training.educates.dev/v1beta1
 kind: Workshop
 metadata:
