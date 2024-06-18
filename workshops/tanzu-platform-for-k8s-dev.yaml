@@ -36,29 +36,14 @@ spec:
         name: kapp-installer
         namespace: $(workshop_namespace)
     - apiVersion: secretgen.k14s.io/v1alpha1
-      kind: Password
+      kind: Secret
       metadata:
         name: postgres-existing-secret
-      spec:
-        length: 12
-        secretTemplate:
-          type: Opaque
-          stringData:
-            postgres-password: $(value)
-            password: $(value)
-            replication-password: $(value)
-    - apiVersion: secrets.educates.dev/v1beta1
-      kind: SecretExporter
-      metadata:
-        name: postgres-existing-secret
-      spec:
-        rules:
-        - targetNamespaces:
-            nameSelector:
-              matchNames:
-              - $(workshop_namespace)-*
-                copyAuthorization:
-                  sharedSecret: $(workshop_environment_uid)
+      type: Opaque
+      stringData:
+        postgres-password: #@ data.values.tanzu_platform.db_password
+        password: #@ data.values.tanzu_platform.db_password
+        replication-password: #@ data.values.tanzu_platform.db_password
     - apiVersion: kappctrl.k14s.io/v1alpha1
       kind: App
       metadata:
@@ -98,16 +83,11 @@ spec:
       - image:
           url: ghcr.io/timosalm/tanzu-platform-workshop/lab-tanzu-platform-developer-experience-tanzu-cli-extension-package:v1.3.0
   session:
-    objects:
-    - apiVersion: secrets.educates.dev/v1beta1
-      kind: SecretImporter
-      metadata:
-        name: postgres-existing-secret
-      spec:
-        copyAuthorization:
-          sharedSecret: $(workshop_environment_uid)
     namespaces:
       budget: large
+      security:
+        token:
+          enabled: false
     applications:
       terminal:
         enabled: true
@@ -123,6 +103,8 @@ spec:
       vcluster:
         enabled: false
     env:
+    - name: KUBECONFIG
+      value: /home/eduk8s/.config/tanzu/kube/config
     - name: PUBLIC_REGISTRY_HOST
       value: public-registry-$(session_name).$(ingress_domain)
     - name: TANZU_CLI_CLOUD_SERVICES_ORGANIZATION_ID
@@ -135,6 +117,8 @@ spec:
       value: #@ data.values.tanzu_platform.availability_targets
     - name: TANZU_CLI_SPACE_CREATE_TOKEN
       value: #@ data.values.tanzu_platform.space_creation_token
+    - name: DB_PASSWORD
+      value: #@ data.values.tanzu_platform.db_password
     ingresses:
     - name: public-registry
       host: $(session_name)-registry
