@@ -64,9 +64,9 @@ spec:
             inline:
               paths:
                 values.yaml: |
+                  #@data/values
+                  ---
                   ingress_domain: $(ingress_domain)
-            valuesFrom:
-            - path: values.yaml
         deploy:
         - kapp: {}
 
