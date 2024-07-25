@@ -99,6 +99,7 @@ spec:
         enabled: false
       docker:
         enabled: true
+        storage: 10Gi
       registry:
         enabled: true
       vcluster:
