@@ -10,6 +10,9 @@ spec:
   publish:
     image: "$(image_repository)/lab-tanzu-platform-developer-experience-files:$(workshop_version)"
   environment:
+    secrets:
+    - name: tanzu-solutions-engineering-pull-secret
+      namespace: educates-package
     objects:
     - apiVersion: v1
       kind: ServiceAccount
